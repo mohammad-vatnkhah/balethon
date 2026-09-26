@@ -15,7 +15,7 @@ class StartPhoneAuth:
             app_id: int = 4,
             api_key: str = "C28D46DC4C3A7A26564BFCC48B929086A95C93C98E789A19847BEE8627DE4E7D",
             device_hash: str = None,
-            device_title: str = "Chrome_137.0.0.0, Windows",
+            device_title: str = "Firefox_154.0, Linux",
             send_code_type: int = 1
     ) -> "responses.StartPhoneAuth":
         if device_hash is None:
