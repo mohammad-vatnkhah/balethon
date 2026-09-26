@@ -16,10 +16,15 @@ class HTTP2Connection:
     TIMEOUT = 20
     BASE_URL = "https://next-ws.bale.ai"
     ORIGIN = "https://web.bale.ai"
-    APP_VERSION = "147558"
-    BROWSER_TYPE = "1"
-    BROWSER_VERSION = "137.0.0.0"
-    OS_TYPE = "3"
+    APP_VERSION = "171248"
+    BROWSER_TYPE = "2"
+    BROWSER_VERSION = "154.0"
+    OS_TYPE = "4"
+    LANGUAGE = "en"
+    USER_AGENT = (
+        "Mozilla/5.0 (X11; Linux x86_64; rv:154.0) "
+        "Gecko/20100101 Firefox/154.0"
+    )
 
     def __init__(
             self,
@@ -57,13 +62,24 @@ class HTTP2Connection:
 
     def build_request_headers(self):
         return {
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
             "content-type": "application/grpc-web+proto",
             "app_version": self.APP_VERSION,
             "browser_type": self.BROWSER_TYPE,
             "browser_version": self.BROWSER_VERSION,
+            "language": self.LANGUAGE,
+            "mt_app_version": self.APP_VERSION,
+            "mt_browser_type": self.BROWSER_TYPE,
+            "mt_browser_version": self.BROWSER_VERSION,
+            "mt_language": self.LANGUAGE,
+            "mt_os_type": self.OS_TYPE,
+            "mt_session_id": self.session_id,
             "os_type": self.OS_TYPE,
             "origin": self.ORIGIN,
-            "session_id": self.session_id
+            "session_id": self.session_id,
+            "user-agent": self.USER_AGENT,
+            "x-grpc-web": "1"
         }
 
     def build_request_cookies(self):
