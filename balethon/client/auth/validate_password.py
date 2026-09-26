@@ -10,7 +10,7 @@ class ValidatePassword:
     async def validate_password(
             self: "balethon.Client",
             transaction_hash: str,
-            code: str,
+            password: str,
             is_jwt: bool = True
     ) -> "responses.Auth":
         is_jwt = structs.BoolValue(value=is_jwt)
