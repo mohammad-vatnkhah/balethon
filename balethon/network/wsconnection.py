@@ -258,7 +258,35 @@ class WSConnection:
                 value=structs.RawValue(string_value=self.os_type)
             ),
             structs.MapValueItem(
+                key="language",
+                value=structs.RawValue(string_value=self.LANGUAGE)
+            ),
+            structs.MapValueItem(
                 key="session_id",
+                value=structs.RawValue(string_value=self.session_id)
+            ),
+            structs.MapValueItem(
+                key="mt_app_version",
+                value=structs.RawValue(string_value=self.app_version)
+            ),
+            structs.MapValueItem(
+                key="mt_browser_type",
+                value=structs.RawValue(string_value=self.browser_type)
+            ),
+            structs.MapValueItem(
+                key="mt_browser_version",
+                value=structs.RawValue(string_value=self.browser_version)
+            ),
+            structs.MapValueItem(
+                key="mt_language",
+                value=structs.RawValue(string_value=self.LANGUAGE)
+            ),
+            structs.MapValueItem(
+                key="mt_os_type",
+                value=structs.RawValue(string_value=self.os_type)
+            ),
+            structs.MapValueItem(
+                key="mt_session_id",
                 value=structs.RawValue(string_value=self.session_id)
             ),
         ])
