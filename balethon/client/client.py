@@ -83,8 +83,16 @@ class Client(Chain, Messages, Updates, Users, Attachments, Chats, InviteLinks, P
                     "Make sure to install balethon using `pip install Balethon[userbots]`"
                 )
             jwt = self.load_session()
-            self.ws_connection = None if jwt is None else WSConnection(jwt, time_out)
             self.http2_connection = HTTP2Connection() if jwt is None else HTTP2Connection(jwt)
+            self.ws_connection = (
+                None
+                if jwt is None
+                else WSConnection(
+                    jwt,
+                    time_out,
+                    session_id=self.http2_connection.session_id
+                )
+            )
             self.http_connection = None
         self.sleep_threshold = sleep_threshold
         self.user = None
@@ -285,7 +293,10 @@ class Client(Chain, Messages, Updates, Users, Attachments, Chats, InviteLinks, P
             name_callback=None,
             password_callback=None,
     ):
-        sent_code = await self.start_phone_auth(self.token_or_phone_number)
+        sent_code = await self.start_phone_auth(
+            self.token_or_phone_number,
+            device_title="Firefox_154.0, Linux"
+        )
         while True:
             try:
                 phone_code = await run_asynchronously(phone_code_callback or self.phone_code_callback)
@@ -307,7 +318,11 @@ class Client(Chain, Messages, Updates, Users, Attachments, Chats, InviteLinks, P
                 break
         self.save_session(auth.jwt.value)
         self.http2_connection.access_token = auth.jwt.value
-        self.ws_connection = WSConnection(auth.jwt.value, self.time_out)
+        self.ws_connection = WSConnection(
+            auth.jwt.value,
+            self.time_out,
+            session_id=self.http2_connection.session_id
+        )
 
     async def start_websocket(self):
         await self.initialize()
