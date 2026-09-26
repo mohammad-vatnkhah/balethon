@@ -28,10 +28,15 @@ class WSConnection:
     TIMEOUT = 20
     WEBSOCKET_URI = "wss://next-ws.bale.ai/ws/"
     ORIGIN = "https://web.bale.ai"
-    APP_VERSION = "86550"
-    BROWSER_TYPE = "1"
-    BROWSER_VERSION = "137.0.0.0"
-    OS_TYPE = "3"
+    APP_VERSION = "171248"
+    BROWSER_TYPE = "2"
+    BROWSER_VERSION = "154.0"
+    OS_TYPE = "4"
+    LANGUAGE = "en"
+    USER_AGENT = (
+        "Mozilla/5.0 (X11; Linux x86_64; rv:154.0) "
+        "Gecko/20100101 Firefox/154.0"
+    )
     RETRIES = 3
 
     def __init__(
@@ -44,6 +49,7 @@ class WSConnection:
             browser_type: str = None,
             browser_version: str = None,
             os_type: str = None,
+            session_id: str = None,
             retries: int = None
     ):
         self.access_token = access_token
@@ -54,13 +60,13 @@ class WSConnection:
         self.browser_type = browser_type or self.BROWSER_TYPE
         self.browser_version = browser_version or self.BROWSER_VERSION
         self.os_type = os_type or self.OS_TYPE
+        self.session_id = session_id or self.get_normalized_timestamp()
         self.ws: Optional[ClientConnection] = None
         self.is_started = False
         self.send_queue = asyncio.Queue()
         self.recv_queue = asyncio.Queue()
         self.pending: dict[int, asyncio.Future] = {}
         self.pending_lock = asyncio.Lock()
-        self.session_id: Optional[str] = None
         self.index = 1
         self.send_task = None
         self.recv_task = None
@@ -83,7 +89,8 @@ class WSConnection:
     async def start(self):
         extra_headers = {
             "Cookie": f"access_token={self.access_token}",
-            "Origin": self.origin
+            "Origin": self.origin,
+            "User-Agent": self.USER_AGENT
         }
 
         self.ws = await asyncio.wait_for(
@@ -98,7 +105,6 @@ class WSConnection:
             timeout=self.timeout
         )
 
-        self.session_id = self.get_normalized_timestamp()
         await self.keep_alive()
         self.is_started = True
 
